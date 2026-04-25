@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Morning Briefing</title>
 <link rel="apple-touch-icon" href="Sun.jpg">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Briefing">
-<title>Morning Briefing</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
@@ -427,13 +427,14 @@ async function startFetch(){
   active.forEach(it=>out.appendChild(makeSkel(it.l)));
   let done=0;
   document.getElementById("stxt").textContent="Fetching "+active.length+" sections...";
-  await Promise.all(active.map(async it=>{
+  for(const it of active){
     try{const stories=await fetchSection(it.l,today);fillBlock(it.l,stories,null);}
     catch(e){fillBlock(it.l,[],e.message);}
     done++;
     document.getElementById("pf").style.width=Math.round((done/active.length)*100)+"%";
     document.getElementById("stxt").textContent="Loaded "+done+" of "+active.length+"...";
-  }));
+    if(done<active.length) await new Promise(r=>setTimeout(r,3000));
+  }
   fetching=false;
   document.getElementById("rbtn").disabled=false;
   document.getElementById("stxt").textContent="Updated: "+new Date().toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"});
