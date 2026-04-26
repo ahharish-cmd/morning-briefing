@@ -146,7 +146,7 @@ body.chat-open{padding-right:var(--chat-w);}
 @keyframes shimmer{0%,100%{opacity:.4}50%{opacity:.9}}
 .ep{font-size:12px;color:var(--d-tx);background:var(--d-bg);padding:8px 14px;border-radius:8px;margin:12px 16px;}
 
-/* CHAT PANEL */
+/* CHAT PANEL — desktop: right slide-in, mobile: bottom sheet */
 #chat-panel{
   position:fixed;top:0;right:0;width:var(--chat-w);height:100vh;
   background:var(--paper);border-left:0.5px solid var(--border2);
@@ -174,8 +174,8 @@ body.chat-open{padding-right:var(--chat-w);}
 .cp-clr{padding:4px 12px 8px;flex-shrink:0;}
 .cp-clr button{font-size:11px;color:var(--ink3);background:transparent;border:none;cursor:pointer;text-decoration:underline;text-underline-offset:2px;font-family:var(--fb);}
 .cp-clr button:hover{color:var(--accent);}
-.cp-input-wrap{padding:10px 12px 14px;border-top:0.5px solid var(--border2);display:flex;gap:8px;align-items:flex-end;flex-shrink:0;background:var(--paper);}
-.cp-input{flex:1;padding:9px 12px;border:0.5px solid var(--border2);border-radius:10px;font-size:13px;background:var(--paper2);color:var(--ink);font-family:var(--fb);resize:none;max-height:100px;line-height:1.5;}
+.cp-input-wrap{padding:10px 12px env(safe-area-inset-bottom,14px);border-top:0.5px solid var(--border2);display:flex;gap:8px;align-items:flex-end;flex-shrink:0;background:var(--paper);}
+.cp-input{flex:1;padding:9px 12px;border:0.5px solid var(--border2);border-radius:10px;font-size:16px;background:var(--paper2);color:var(--ink);font-family:var(--fb);resize:none;max-height:100px;line-height:1.5;}
 .cp-input:focus{outline:none;border-color:var(--accent);}
 .cp-send{padding:9px 14px;background:var(--accent);color:#fff;border:none;border-radius:10px;cursor:pointer;font-size:13px;font-family:var(--fb);white-space:nowrap;flex-shrink:0;}
 .cp-send:hover{background:var(--accent2);}
@@ -183,9 +183,20 @@ body.chat-open{padding-right:var(--chat-w);}
 
 body.rdy #ks{display:none;}
 body.rdy #app{display:block;}
+
+/* MOBILE: bottom sheet */
 @media(max-width:700px){
-  :root{--chat-w:100vw;}
   body.chat-open{padding-right:0;}
+  #chat-panel{
+    top:auto;bottom:0;left:0;right:0;
+    width:100%;height:70vh;
+    border-left:none;border-top:0.5px solid var(--border2);
+    border-radius:16px 16px 0 0;
+    transform:translateY(100%);
+    box-shadow:0 -4px 24px rgba(0,0,0,0.12);
+  }
+  #chat-panel.open{transform:translateY(0);}
+  .cp-msgs{-webkit-overflow-scrolling:touch;}
 }
 </style>
 </head>
