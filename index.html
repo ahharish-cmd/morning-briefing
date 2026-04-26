@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
-:root {
+:root{
   --ink:#1a1814;--ink2:#5a5650;--ink3:#9a958e;
   --paper:#f7f4ee;--paper2:#edeae2;--paper3:#e2ddd4;
   --accent:#c45c2a;--accent2:#8b3a18;
@@ -61,15 +61,43 @@ body.chat-open{padding-right:var(--chat-w);}
 .reset{font-size:11px;color:var(--ink3);cursor:pointer;text-decoration:underline;text-underline-offset:2px;}
 .reset:hover{color:var(--accent);}
 
-.iw{background:var(--paper2);border-radius:var(--r);padding:1rem 1.25rem;margin-bottom:1.5rem;border:0.5px solid var(--border);}
+/* INTERESTS PANEL */
+.iw{background:var(--paper2);border-radius:var(--r);padding:1rem 1.25rem;margin-bottom:1rem;border:0.5px solid var(--border);}
 .ih{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
 .ilbl{font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);}
 .chips{display:flex;flex-wrap:wrap;gap:7px;}
-.chip{display:inline-flex;align-items:center;gap:5px;padding:5px 13px;border-radius:20px;border:0.5px solid var(--border2);font-size:12px;cursor:pointer;background:var(--paper);color:var(--ink2);transition:all .15s;user-select:none;font-family:var(--fb);}
-.chip.on{background:var(--accent);border-color:var(--accent);color:#fff;}
-.chip .dot{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.7;flex-shrink:0;}
+
+/* CHIP STATES */
+.chip{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:6px 14px;border-radius:20px;
+  border:0.5px solid var(--border2);font-size:12px;
+  cursor:pointer;background:var(--paper);color:var(--ink2);
+  transition:all .2s;user-select:none;font-family:var(--fb);
+  position:relative;
+}
+/* Unselected = grey, no dot */
+.chip:hover{border-color:var(--accent);color:var(--accent);}
+
+/* Loading = pulsing orange */
+.chip.loading{
+  background:var(--accent);border-color:var(--accent);color:#fff;
+  animation:chipPulse 1s ease-in-out infinite;
+}
+@keyframes chipPulse{0%,100%{opacity:.6}50%{opacity:1}}
+
+/* Loaded = solid orange + checkmark */
+.chip.loaded{
+  background:var(--accent);border-color:var(--accent);color:#fff;
+  animation:none;opacity:1;
+}
+.chip.loaded .ck{display:inline;}
+.chip .ck{display:none;font-size:11px;}
+
+/* Add chip */
 .chip-add{border-style:dashed;}
 .chip-add:hover{border-color:var(--accent);color:var(--accent);}
+
 .ar{display:none;align-items:center;gap:8px;margin-top:10px;}
 .ar.show{display:flex;}
 .ar input{flex:1;padding:6px 10px;border:0.5px solid var(--border2);border-radius:8px;font-size:13px;background:var(--paper);color:var(--ink);font-family:var(--fb);}
@@ -78,13 +106,15 @@ body.chat-open{padding-right:var(--chat-w);}
 .bsm:hover{background:var(--paper3);}
 .bx{background:transparent;border:none;color:var(--ink3);font-size:16px;cursor:pointer;padding:0 4px;}
 
-.toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;}
-.stxt{font-size:12px;color:var(--ink3);}
-.br{padding:8px 18px;font-size:13px;font-weight:500;border-radius:var(--r);cursor:pointer;border:0.5px solid var(--border2);background:var(--paper2);color:var(--ink);font-family:var(--fb);transition:all .15s;}
-.br:hover{background:var(--paper3);}
-.br:disabled{opacity:.5;cursor:default;}
-.pw{height:2px;background:var(--paper3);border-radius:2px;margin-bottom:1.5rem;overflow:hidden;}
-.pf{height:100%;background:var(--accent);border-radius:2px;transition:width .35s ease;width:0;}
+/* PROMPT */
+.prompt-msg{
+  text-align:center;padding:3rem 1rem;
+  font-size:14px;color:var(--ink3);line-height:1.7;
+}
+.prompt-msg span{font-size:22px;display:block;margin-bottom:8px;}
+
+/* STATUS */
+.stxt{font-size:12px;color:var(--ink3);margin-bottom:1.25rem;min-height:16px;}
 
 /* NEWS BLOCKS */
 .nb{border:0.5px solid var(--border);border-radius:var(--r);background:var(--paper);overflow:hidden;margin-bottom:1.25rem;}
@@ -125,60 +155,34 @@ body.chat-open{padding-right:var(--chat-w);}
   z-index:100;box-shadow:-4px 0 24px rgba(0,0,0,0.08);
 }
 #chat-panel.open{transform:translateX(0);}
-
-.cp-head{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:14px 16px;border-bottom:0.5px solid var(--border2);
-  background:var(--paper2);flex-shrink:0;
-}
+.cp-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:0.5px solid var(--border2);background:var(--paper2);flex-shrink:0;}
 .cp-title{font-size:13px;font-weight:500;color:var(--ink);}
 .cp-sub{font-size:11px;color:var(--ink3);margin-top:2px;}
 .cp-close{background:transparent;border:none;color:var(--ink3);font-size:18px;cursor:pointer;padding:0 2px;line-height:1;}
 .cp-close:hover{color:var(--ink);}
-
-.cp-context{
-  margin:10px 12px 0;padding:8px 12px;
-  background:var(--paper2);border-radius:8px;border-left:3px solid var(--accent);
-  font-size:11px;color:var(--ink2);line-height:1.5;flex-shrink:0;
-}
+.cp-context{margin:10px 12px 0;padding:8px 12px;background:var(--paper2);border-radius:8px;border-left:3px solid var(--accent);font-size:11px;color:var(--ink2);line-height:1.5;flex-shrink:0;}
 .cp-context strong{color:var(--ink);font-weight:500;display:block;margin-bottom:2px;}
-
 .cp-msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:10px;}
 .msg{max-width:88%;font-size:13px;line-height:1.6;padding:9px 12px;border-radius:12px;}
 .msg.user{align-self:flex-end;background:var(--accent);color:#fff;border-radius:12px 12px 3px 12px;}
 .msg.ai{align-self:flex-start;background:var(--paper2);color:var(--ink);border-radius:12px 12px 12px 3px;}
-.msg.ai a{color:var(--accent);}
 .msg-thinking{align-self:flex-start;padding:9px 12px;background:var(--paper2);border-radius:12px;display:flex;gap:5px;align-items:center;}
 .td{width:6px;height:6px;border-radius:50%;background:var(--ink3);animation:td 1.2s infinite;}
 .td:nth-child(2){animation-delay:.2s;}
 .td:nth-child(3){animation-delay:.4s;}
 @keyframes td{0%,100%{opacity:.3}50%{opacity:1}}
-
 .cp-clr{padding:4px 12px 8px;flex-shrink:0;}
 .cp-clr button{font-size:11px;color:var(--ink3);background:transparent;border:none;cursor:pointer;text-decoration:underline;text-underline-offset:2px;font-family:var(--fb);}
 .cp-clr button:hover{color:var(--accent);}
-
-.cp-input-wrap{
-  padding:10px 12px 14px;border-top:0.5px solid var(--border2);
-  display:flex;gap:8px;align-items:flex-end;flex-shrink:0;background:var(--paper);
-}
-.cp-input{
-  flex:1;padding:9px 12px;border:0.5px solid var(--border2);border-radius:10px;
-  font-size:13px;background:var(--paper2);color:var(--ink);font-family:var(--fb);
-  resize:none;max-height:100px;line-height:1.5;
-}
+.cp-input-wrap{padding:10px 12px 14px;border-top:0.5px solid var(--border2);display:flex;gap:8px;align-items:flex-end;flex-shrink:0;background:var(--paper);}
+.cp-input{flex:1;padding:9px 12px;border:0.5px solid var(--border2);border-radius:10px;font-size:13px;background:var(--paper2);color:var(--ink);font-family:var(--fb);resize:none;max-height:100px;line-height:1.5;}
 .cp-input:focus{outline:none;border-color:var(--accent);}
-.cp-send{
-  padding:9px 14px;background:var(--accent);color:#fff;border:none;
-  border-radius:10px;cursor:pointer;font-size:13px;font-family:var(--fb);
-  white-space:nowrap;flex-shrink:0;
-}
+.cp-send{padding:9px 14px;background:var(--accent);color:#fff;border:none;border-radius:10px;cursor:pointer;font-size:13px;font-family:var(--fb);white-space:nowrap;flex-shrink:0;}
 .cp-send:hover{background:var(--accent2);}
 .cp-send:disabled{opacity:.5;cursor:default;}
 
 body.rdy #ks{display:none;}
 body.rdy #app{display:block;}
-
 @media(max-width:700px){
   :root{--chat-w:100vw;}
   body.chat-open{padding-right:0;}
@@ -187,7 +191,6 @@ body.rdy #app{display:block;}
 </head>
 <body>
 
-<!-- KEY SCREEN -->
 <div id="ks">
   <div class="kc">
     <h2>Morning Briefing</h2>
@@ -196,13 +199,12 @@ body.rdy #app{display:block;}
     <input type="text" id="sn" placeholder="e.g. Harish" value="Harish"/>
     <label>Anthropic API key</label>
     <input type="password" id="sk" placeholder="sk-ant-api03-..."/>
-    <div class="hint">Get your key at <a href="https://console.anthropic.com/settings/keys" target="_blank">console.anthropic.com</a>. Costs roughly Rs. 2–4 per day. Saved in your browser only.</div>
+    <div class="hint">Get your key at <a href="https://console.anthropic.com/settings/keys" target="_blank">console.anthropic.com</a>. Saved in your browser only.</div>
     <button class="kbtn" onclick="saveKey()">Start my briefing →</button>
     <div class="kerr" id="ke"></div>
   </div>
 </div>
 
-<!-- MAIN APP -->
 <div id="app">
   <div class="mast">
     <div class="mast-top">
@@ -213,10 +215,11 @@ body.rdy #app{display:block;}
     <div class="fn">Briefing for <input type="text" id="pn" maxlength="30"/></div>
   </div>
 
+  <!-- INTERESTS -->
   <div class="iw">
     <div class="ih">
-      <span class="ilbl">Your interests</span>
-      <span style="font-size:11px;color:var(--ink3)">Tap to toggle · add your own</span>
+      <span class="ilbl">Select a section to load</span>
+      <span style="font-size:11px;color:var(--ink3)">tap to read · long-press to remove</span>
     </div>
     <div class="chips" id="chips"></div>
     <div class="ar" id="ar">
@@ -226,11 +229,7 @@ body.rdy #app{display:block;}
     </div>
   </div>
 
-  <div class="toolbar">
-    <span class="stxt" id="stxt">Ready</span>
-    <button class="br" id="rbtn" onclick="startFetch()">Refresh ↻</button>
-  </div>
-  <div class="pw"><div class="pf" id="pf"></div></div>
+  <div class="stxt" id="stxt">Tap any section above to load its news.</div>
   <div id="no"></div>
 </div>
 
@@ -247,36 +246,32 @@ body.rdy #app{display:block;}
   <div class="cp-clr"><button onclick="clearChat()">Clear conversation</button></div>
   <div class="cp-msgs" id="cp-msgs"></div>
   <div class="cp-input-wrap">
-    <textarea class="cp-input" id="cp-input" placeholder="Ask anything about this story..." rows="1"></textarea>
+    <textarea class="cp-input" id="cp-input" placeholder="Ask anything..." rows="1"></textarea>
     <button class="cp-send" id="cp-send" onclick="sendMsg()">Send</button>
   </div>
 </div>
 
 <script>
-const SK="mbv6";
+const SK="mbv7";
 const DEF=["India politics","India economy & finance","India technology","Citizen rules & regulations","MSME & startups","Global headlines","Ongoing global events","MSME events & summits"];
-let apiKey="",pname="Harish",interests=[],fetching=false;
-
-// Chat state
-let chatHistory=[];
-let currentStory=null;
-let chatThinking=false;
+let apiKey="",pname="Harish",interests=[];
+let sectionState={};  // "idle" | "loading" | "loaded" per section
+let chatHistory=[],currentStory=null,chatThinking=false;
 
 /* ── Storage ── */
 function load(){
   try{
     const d=JSON.parse(localStorage.getItem(SK)||"{}");
     apiKey=d.key||""; pname=d.name||"Harish";
-    interests=d.interests&&d.interests.length?d.interests:DEF.map(l=>({l,on:true}));
-    // Restore chat history
+    interests=d.interests&&d.interests.length?d.interests:DEF.map(l=>({l}));
     chatHistory=d.chatHistory||[];
-  }catch(e){interests=DEF.map(l=>({l,on:true}));}
+  }catch(e){interests=DEF.map(l=>({l}));}
 }
 function save(){
   try{localStorage.setItem(SK,JSON.stringify({key:apiKey,name:pname,interests,chatHistory}));}catch(e){}
 }
 
-/* ── Key setup ── */
+/* ── Key ── */
 function saveKey(){
   const k=document.getElementById("sk").value.trim();
   const n=document.getElementById("sn").value.trim()||"Harish";
@@ -298,20 +293,35 @@ function boot(){
   document.getElementById("pn").value=pname;
   document.getElementById("dt").textContent=new Date().toLocaleDateString("en-IN",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
   document.getElementById("pn").addEventListener("change",e=>{pname=e.target.value.trim()||"Harish";save();});
+  sectionState={};
   renderChips();
-  // Restore chat messages visually if any
   if(chatHistory.length) renderAllMessages();
-  startFetch();
 }
 
 /* ── Chips ── */
 function renderChips(){
   const g=document.getElementById("chips"); g.innerHTML="";
   interests.forEach((it,i)=>{
+    const state=sectionState[it.l]||"idle";
     const c=document.createElement("span");
-    c.className="chip"+(it.on?" on":"");
-    c.innerHTML=`<span class="dot"></span>${it.l}`;
-    c.onclick=()=>{if(fetching)return;interests[i].on=!interests[i].on;save();renderChips();};
+    c.className="chip"+(state==="loading"?" loading":state==="loaded"?" loaded":"");
+    c.innerHTML=`${it.l}<span class="ck"> ✓</span>`;
+    c.title=state==="loaded"?"Loaded — tap to reload":state==="loading"?"Loading...":"Tap to load";
+
+    // Tap = load section
+    c.onclick=()=>{
+      if(sectionState[it.l]==="loading") return;
+      fetchSection(it.l);
+    };
+
+    // Long press = remove
+    let pressTimer;
+    c.addEventListener("mousedown",()=>{ pressTimer=setTimeout(()=>removeTopic(i),700); });
+    c.addEventListener("mouseup",()=>clearTimeout(pressTimer));
+    c.addEventListener("mouseleave",()=>clearTimeout(pressTimer));
+    c.addEventListener("touchstart",()=>{ pressTimer=setTimeout(()=>removeTopic(i),700); },{passive:true});
+    c.addEventListener("touchend",()=>clearTimeout(pressTimer));
+
     g.appendChild(c);
   });
   const a=document.createElement("span");
@@ -319,10 +329,21 @@ function renderChips(){
   a.onclick=()=>{document.getElementById("ar").classList.add("show");document.getElementById("ai").focus();};
   g.appendChild(a);
 }
+
+function removeTopic(i){
+  if(!confirm(`Remove "${interests[i].l}"?`)) return;
+  const label=interests[i].l;
+  interests.splice(i,1);
+  delete sectionState[label];
+  // Remove block from page if present
+  const el=document.getElementById("b-"+enc(label));
+  if(el) el.remove();
+  save(); renderChips();
+}
 function hideAdd(){document.getElementById("ar").classList.remove("show");document.getElementById("ai").value="";}
 function addTopic(){
   const v=document.getElementById("ai").value.trim(); if(!v)return;
-  interests.push({l:v,on:true}); save(); renderChips(); hideAdd();
+  interests.push({l:v}); save(); renderChips(); hideAdd();
 }
 
 /* ── Helpers ── */
@@ -359,7 +380,7 @@ function fillBlock(label,stories,err){
     return;
   }
   el.innerHTML=`<div class="bh"><span class="bt">${label}</span><span class="bb">${stories.length} stories</span></div>`
-    +stories.map((st,i)=>`<div class="story">
+    +stories.map(st=>`<div class="story">
       <div class="st-top"><span class="tag ${tagCls(st.tag||label)}">${st.tag||"News"}</span><span class="hl">${st.headline||""}</span></div>
       <div class="sum">${st.summary||""}</div>
       <div class="story-footer">
@@ -372,45 +393,40 @@ function fillBlock(label,stories,err){
     </div>`).join("");
 }
 
-/* ── Extract JSON object ── */
-function extractObj(text){
-  try{const p=JSON.parse(text);if(p&&p.sections)return p;}catch(e){}
+/* ── Extract array ── */
+function extractArr(text){
+  try{const p=JSON.parse(text);if(Array.isArray(p))return p;}catch(e){}
   const fence=text.match(/```(?:json)?\s*([\s\S]*?)```/);
-  if(fence){try{const p=JSON.parse(fence[1].trim());if(p&&p.sections)return p;}catch(e){}}
-  const s=text.indexOf("{"),en=text.lastIndexOf("}");
-  if(s>=0&&en>s){try{const p=JSON.parse(text.slice(s,en+1));if(p&&p.sections)return p;}catch(e){}}
+  if(fence){try{const p=JSON.parse(fence[1].trim());if(Array.isArray(p))return p;}catch(e){}}
+  const s=text.indexOf("["),en=text.lastIndexOf("]");
+  if(s>=0&&en>s){try{return JSON.parse(text.slice(s,en+1));}catch(e){}}
   return null;
 }
 
-/* ── Single API call for all sections ── */
-async function startFetch(){
-  if(fetching)return;
-  const active=interests.filter(i=>i.on);
-  if(!active.length){document.getElementById("stxt").textContent="No interests selected.";return;}
-  fetching=true;
-  document.getElementById("rbtn").disabled=true;
-  document.getElementById("pf").style.width="10%";
-  const today=new Date().toLocaleDateString("en-IN",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
+/* ── Fetch one section on demand ── */
+async function fetchSection(label){
+  sectionState[label]="loading";
+  renderChips();
+  document.getElementById("stxt").textContent="Loading "+label+"...";
+
+  // If block doesn't exist yet on page, append it
   const out=document.getElementById("no");
-  out.innerHTML="";
-  active.forEach(it=>out.appendChild(makeSkel(it.l)));
-  document.getElementById("stxt").textContent="Fetching your briefing...";
+  if(!document.getElementById("b-"+enc(label))){
+    out.appendChild(makeSkel(label));
+    // Scroll to it
+    setTimeout(()=>document.getElementById("b-"+enc(label))?.scrollIntoView({behavior:"smooth",block:"start"}),100);
+  } else {
+    // Replace existing block with skeleton
+    const existing=document.getElementById("b-"+enc(label));
+    const skel=makeSkel(label);
+    out.replaceChild(skel,existing);
+  }
 
-  const sectionList=active.map(it=>it.l).join(", ");
-  const prompt=`Today is ${today}. You are a news researcher for ${pname}, an SME leader based in Bangalore, India.
-
-Search the web and find today's top news for each of these sections: ${sectionList}
-
-For any section about events or summits: find real upcoming events in India in next 6 months for MSME or startup leaders.
-For all other sections: find 2 real news stories from the last 48 hours. India focus.
-
-Return ONLY this exact JSON structure, nothing else, no markdown:
-{"sections":[{"section":"SECTION NAME","stories":[{"headline":"max 10 words","summary":"2 sentences: what happened and why it matters to Indian SME leaders","tag":"Politics or Economy or Technology or Policy or MSME or Global or Event","url":"article url or empty string","source":"publication name","date":"${today}"}]}]}
-
-Rules:
-- Exactly 2 stories per section
-- section name must match exactly one of: ${sectionList}
-- Return raw JSON only, no backticks, no explanation`;
+  const today=new Date().toLocaleDateString("en-IN",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
+  const isEv=/event|summit|conference/i.test(label);
+  const prompt=isEv
+    ?`Today is ${today}. Find 3 real upcoming events in India in the next 6 months for MSME owners, startup founders, or SME policy leaders. Look for events by CII, NASSCOM, FICCI, Startup India, TiE, Inc42. Return ONLY a JSON array starting with [. Each item: {"headline":"event name","summary":"one sentence: what, where, when, who should attend","tag":"Event","url":"url or empty string","source":"organiser","date":"month year"}`
+    :`Today is ${today}. Find 3 real news stories from the last 48 hours about: ${label}. India focus. Return ONLY a JSON array starting with [. Each item: {"headline":"max 10 words","summary":"2 sentences: what happened and why it matters to Indian SME leaders","tag":"Politics or Economy or Technology or Policy or MSME or Global","url":"article url or empty string","source":"publication name","date":"today's date"}`;
 
   try{
     const resp=await fetch("https://api.anthropic.com/v1/messages",{
@@ -423,64 +439,47 @@ Rules:
       },
       body:JSON.stringify({
         model:"claude-haiku-4-5-20251001",
-        max_tokens:3000,
-        system:"You are a JSON API. Search the web for current news. Return only a raw JSON object starting with {. No prose, no markdown, no backticks.",
+        max_tokens:1200,
+        system:"You are a JSON API. Return only a raw JSON array beginning with [. No prose, no markdown, no backticks.",
         tools:[{type:"web_search_20250305",name:"web_search"}],
         messages:[{role:"user",content:prompt}]
       })
     });
-    document.getElementById("pf").style.width="70%";
     if(!resp.ok){const e=await resp.json().catch(()=>({}));throw new Error(e.error?.message||"HTTP "+resp.status);}
     const data=await resp.json();
     const text=data.content.filter(b=>b.type==="text").map(b=>b.text).join("").trim();
-    const parsed=extractObj(text);
-    if(!parsed||!parsed.sections){throw new Error("Could not parse response. Raw: "+text.slice(0,120));}
-    // Fill each section
-    parsed.sections.forEach(sec=>{
-      const match=active.find(it=>it.l.toLowerCase()===sec.section.toLowerCase())||active.find(it=>sec.section.toLowerCase().includes(it.l.toLowerCase().split(" ")[0]));
-      if(match) fillBlock(match.l,sec.stories||[],null);
-    });
-    // Any sections not returned — show empty
-    active.forEach(it=>{
-      const found=parsed.sections.find(s=>s.section.toLowerCase()===it.l.toLowerCase()||it.l.toLowerCase().includes(s.section.toLowerCase().split(" ")[0]));
-      if(!found) fillBlock(it.l,[],"No stories returned for this section.");
-    });
-    document.getElementById("pf").style.width="100%";
+    const arr=extractArr(text);
+    if(!arr) throw new Error("Could not parse response");
+    fillBlock(label,arr,null);
+    sectionState[label]="loaded";
   }catch(e){
-    active.forEach(it=>fillBlock(it.l,[],e.message));
-    document.getElementById("stxt").textContent="Failed. Try Refresh.";
+    fillBlock(label,[],e.message);
+    sectionState[label]="idle";
   }
-  fetching=false;
-  document.getElementById("rbtn").disabled=false;
-  document.getElementById("stxt").textContent="Updated: "+new Date().toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"});
+
+  renderChips();
+  const loaded=Object.values(sectionState).filter(s=>s==="loaded").length;
+  document.getElementById("stxt").textContent=loaded>0?`${loaded} section${loaded>1?"s":""} loaded — tap another to continue.`:"Tap a section above to load its news.";
 }
 
-/* ═══════════════════════════════
-   CHAT PANEL
-═══════════════════════════════ */
+/* ═══════════════ CHAT ═══════════════ */
 function openChat(story){
   currentStory=story;
-  // Show context card
   const ctx=document.getElementById("cp-context");
   ctx.style.display="block";
   ctx.innerHTML=`<strong>${story.headline}</strong>${story.summary}`;
   document.getElementById("cp-sub").textContent="about this story";
-
-  // If no messages yet, add a system-style opener
   if(chatHistory.length===0){
-    addAIMessage(`Hi ${pname}! I'm here to help you understand this story better. What would you like to know?`);
+    addAIMessage(`Hi ${pname}! Ask me anything — about this story, related concepts, market data, or anything else.`);
   }
-
   document.getElementById("chat-panel").classList.add("open");
   document.body.classList.add("chat-open");
   document.getElementById("cp-input").focus();
 }
-
 function closeChat(){
   document.getElementById("chat-panel").classList.remove("open");
   document.body.classList.remove("chat-open");
 }
-
 function clearChat(){
   chatHistory=[];
   document.getElementById("cp-msgs").innerHTML="";
@@ -488,39 +487,29 @@ function clearChat(){
   document.getElementById("cp-context").style.display="none";
   save();
 }
-
 function addUserMessage(text){
   const msgs=document.getElementById("cp-msgs");
   const d=document.createElement("div");
   d.className="msg user"; d.textContent=text;
-  msgs.appendChild(d);
-  msgs.scrollTop=msgs.scrollHeight;
+  msgs.appendChild(d); msgs.scrollTop=msgs.scrollHeight;
 }
-
 function addAIMessage(text){
   const msgs=document.getElementById("cp-msgs");
   const d=document.createElement("div");
   d.className="msg ai"; d.innerHTML=text.replace(/\n/g,"<br>");
-  msgs.appendChild(d);
-  msgs.scrollTop=msgs.scrollHeight;
+  msgs.appendChild(d); msgs.scrollTop=msgs.scrollHeight;
 }
-
 function showThinking(){
   const msgs=document.getElementById("cp-msgs");
   const d=document.createElement("div");
   d.className="msg-thinking"; d.id="thinking-dot";
   d.innerHTML=`<div class="td"></div><div class="td"></div><div class="td"></div>`;
-  msgs.appendChild(d);
-  msgs.scrollTop=msgs.scrollHeight;
+  msgs.appendChild(d); msgs.scrollTop=msgs.scrollHeight;
 }
-function hideThinking(){
-  const d=document.getElementById("thinking-dot");
-  if(d)d.remove();
-}
+function hideThinking(){const d=document.getElementById("thinking-dot");if(d)d.remove();}
 
 function renderAllMessages(){
-  const msgs=document.getElementById("cp-msgs");
-  msgs.innerHTML="";
+  const msgs=document.getElementById("cp-msgs"); msgs.innerHTML="";
   chatHistory.forEach(m=>{
     const d=document.createElement("div");
     d.className="msg "+(m.role==="user"?"user":"ai");
@@ -536,21 +525,15 @@ async function sendMsg(){
   const inp=document.getElementById("cp-input");
   const text=inp.value.trim(); if(!text)return;
   inp.value=""; inp.style.height="auto";
-
   addUserMessage(text);
-
-  // Build messages for API — include story context as system note if available
   const storyCtx=currentStory
-    ?`The user is reading this news story:\nHeadline: ${currentStory.headline}\nSummary: ${currentStory.summary}\nSource: ${currentStory.source||""}\n\nAnswer questions about it clearly and simply. Keep responses concise — 3 to 5 sentences unless asked for more. Plain Indian English.`
-    :`You are a helpful assistant for ${pname}, an SME leader based in Bangalore, India. Keep responses concise and practical.`;
-
-  chatHistory.push({role:"user",content:[{type:"text",text:text}]});
+    ?`You are a knowledgeable assistant for ${pname}, an SME leader based in Bangalore, India. The user started from this news story:\nHeadline: ${currentStory.headline}\nSummary: ${currentStory.summary}\n\nUse web search to answer any question fully — about this story, related concepts, current data like prices or rates, or anything else the user asks. Do not limit yourself to the article. Plain Indian English. Concise but thorough.`
+    :`You are a knowledgeable assistant for ${pname}, an SME leader based in Bangalore, India. Use web search to answer questions. Plain Indian English.`;
+  chatHistory.push({role:"user",content:[{type:"text",text}]});
   save();
-
   chatThinking=true;
   document.getElementById("cp-send").disabled=true;
   showThinking();
-
   try{
     const resp=await fetch("https://api.anthropic.com/v1/messages",{
       method:"POST",
@@ -570,12 +553,10 @@ async function sendMsg(){
     });
     if(!resp.ok){const e=await resp.json().catch(()=>({}));throw new Error(e.error?.message||"HTTP "+resp.status);}
     const data=await resp.json();
-    // Extract only text from response — strip tool_use blocks so history stays clean
     const reply=data.content.filter(b=>b.type==="text").map(b=>b.text).join("").trim();
     hideThinking();
     if(!reply){addAIMessage("Sorry, I could not find an answer. Try rephrasing.");chatThinking=false;document.getElementById("cp-send").disabled=false;return;}
     addAIMessage(reply);
-    // Store only text in history — avoids tool_use/tool_result pairing issues
     chatHistory.push({role:"assistant",content:[{type:"text",text:reply}]});
     save();
   }catch(e){
@@ -592,7 +573,6 @@ load();
 document.addEventListener("DOMContentLoaded",()=>{
   document.getElementById("sk").addEventListener("keydown",e=>{if(e.key==="Enter")saveKey();});
   document.getElementById("ai").addEventListener("keydown",e=>{if(e.key==="Enter")addTopic();});
-  // Auto-grow textarea
   document.getElementById("cp-input").addEventListener("input",function(){
     this.style.height="auto";
     this.style.height=Math.min(this.scrollHeight,100)+"px";
