@@ -437,7 +437,7 @@ async function fetchSection(label){
   const isEv=/event|summit|conference/i.test(label);
   const prompt=isEv
     ?`Today is ${today}. Find 3 real upcoming events in India in the next 6 months for MSME owners, startup founders, or SME policy leaders. Look for events by CII, NASSCOM, FICCI, Startup India, TiE, Inc42. Return ONLY a JSON array starting with [. Each item: {"headline":"event name","summary":"one sentence: what, where, when, who should attend","tag":"Event","url":"url or empty string","source":"organiser","date":"month year"}`
-    :`Today is ${today}. Find 3 real news stories from the last 48 hours about: ${label}. India focus. Return ONLY a JSON array starting with [. Each item: {"headline":"max 10 words","summary":"2 sentences: what happened and why it matters to Indian SME leaders","tag":"Politics or Economy or Technology or Policy or MSME or Global","url":"article url or empty string","source":"publication name","date":"today's date"}`;
+    :`Today is ${today}. Find 3 real news stories from the last 48 hours about: ${label}. India focus. Return ONLY a JSON array starting with [. Each item: {"headline":"max 10 words","summary":"2 sentences. Sentence 1: what happened, stated factually and neutrally. Sentence 2: why this matters — state the genuine significance. Only mention business or SME relevance if it directly and naturally applies. Do not force a business angle on political, social, or general news.","tag":"Politics or Economy or Technology or Policy or MSME or Global","url":"article url or empty string","source":"publication name","date":"today's date"}`;
 
   try{
     const resp=await fetch("https://api.anthropic.com/v1/messages",{
